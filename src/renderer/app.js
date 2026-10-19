@@ -200,6 +200,12 @@
       // refresh voice select if settings page is open
       const sel = $('#voiceSelect');
       if (sel) sel.innerHTML = voiceOptionsHtml();
+      const lessonSel = $('#lessonVoice');
+      if (lessonSel) lessonSel.innerHTML = voiceOptionsHtml();
+      if (state.voices.length) {
+        const hint = document.getElementById('voiceHint');
+        if (hint) hint.remove();
+      }
     };
   }
 
@@ -723,6 +729,12 @@
             <span class="chip" id="lessonRateVal">${(Number(state.settings.rate) || 1).toFixed(2)}×</span>
             <button class="btn btn--small" id="stopAudio">⏹ Стоп</button>
           </div>
+          ${(!state.voices || state.voices.length === 0) ? `
+            <div id="voiceHint" class="pitfall" style="margin-top:12px;background:#eff6ff;border-color:#bfdbfe;color:#1e3a8a">
+              <b>ℹ️ Если озвучка не работает.</b> Добавьте язык «English» и речевой пакет в
+              «Параметры Windows → Время и язык → Язык и регион», затем перезапустите приложение.
+              Текст урока доступен и без озвучки.
+            </div>` : ''}
 
           <div id="transcript" style="margin-top:14px;display:flex;flex-direction:column;gap:8px"></div>
 
