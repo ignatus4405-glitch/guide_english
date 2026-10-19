@@ -61,7 +61,7 @@ npm run docs:generate  # обновить индекс контента и ст�
 npm run build:win    # локальная сборка установщика (Windows)
 ```
 
-Требования: Node.js ≥ 18, npm ≥ 9. Сборка `.exe` выполняется в CI на `windows-latest`.
+Требования: Node.js ≥ 22 (CI использует Node 22), npm ≥ 10. Сборка `.exe` выполняется в CI на `windows-latest`.
 
 - [Архитектура и карта кода](docs/ARCHITECTURE.md)
 - [Инструкция для агентов и контрибьюторов](docs/AGENTS.md)
