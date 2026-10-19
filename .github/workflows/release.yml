@@ -160,6 +160,20 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Проверка артефактов автообновления
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f dist/latest.yml || (echo "::error::latest.yml не создан — автообновление не работает" && exit 1)
+          grep -q "version: ${{ needs.version.outputs.version }}" dist/latest.yml \
+            || (echo "::error::latest.yml содержит другую версию" && exit 1)
+          test -f dist/win-unpacked/resources/app-update.yml \
+            || (echo "::error::app-update.yml отсутствует в сборке" && exit 1)
+          test -f dist/win-unpacked/resources/app.asar \
+            || (echo "::error::app.asar отсутствует в сборке" && exit 1)
+          echo "--- latest.yml ---"
+          cat dist/latest.yml
+
       - name: Оформление релиза (заголовок и release notes)
         shell: bash
         env:
