@@ -323,8 +323,12 @@ function setupIpc() {
   });
   ipcMain.handle('store:clearProgress', () => {
     if (!store) return { ok: false };
+    // прогресс игры и учебные данные; настройки (голос, тема) сохраняются
+    store.set('game', {});
     store.set('progress', {});
     store.set('completedLessons', []);
+    store.set('vocabKnown', {});
+    store.set('vocabularyProgress', {});
     return { ok: true };
   });
   ipcMain.handle('dialog:showMessage', async (e, opts) => {
