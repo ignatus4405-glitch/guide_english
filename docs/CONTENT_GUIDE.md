@@ -90,10 +90,34 @@ npm run docs:generate
 
 `en` уникален внутри набора. Наборы участвуют в тренажёре слов, поэтому нужны минимум 4 разных перевода в пуле.
 
-## 4. После правки
+## 4. Новый шаг на пути
+
+Учебный материал попадает в игру только если на него ссылается шаг в `src/data/course.js`:
+
+```js
+{
+  id: 's3-listening-doctor',          // уникальный id шага
+  type: 'listening',                   // grammar | listening | vocab | practice | chest | trophy
+  ref: 'b4-doctor',                    // id темы/урока/набора из соответствующего файла
+  title: 'У врача',                    // подпись под кружком
+  icon: '🩺'                           // эмодзи на узле
+}
+```
+
+Правила:
+
+- порядок шагов в массиве = порядок прохождения; шаг открывается после предыдущего;
+- `id` шага уникален среди всех разделов;
+- `ref` обязателен для `grammar`, `listening`, `vocab`; для `practice/chest/trophy` не нужен;
+- в каждом разделе должна быть хотя бы одна `practice`;
+- тесты `npm test` проверяют, что каждый материал из `grammar.js`, `listening.js`, `vocabulary.js` присутствует на пути (иначе контент недоступен игроку).
+
+Ветку с наградой (`chest`, `trophy`) можно ставить в конец раздела — она выдаёт самоцветы и не содержит вопросов.
+
+## 5. После правки
 
 ```bash
-npm test                  # инварианты и валидация
+npm test                  # инварианты, курс и UI
 npm run docs:generate     # обновит CONTENT_INDEX.md и статистику README
 git add src/data docs/CONTENT_INDEX.md README.md
 git commit -m "feat(grammar): добавить Present Perfect"
