@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; connect-src *; media-src *; img-src 'self' data: https:;">
+  <link rel="icon" href="favicon.png" />
+  <title>Guide English — изучай английский с нуля</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Update banner -->
+  <div id="update-banner" class="update-banner hidden">
+    <div class="update-banner__content">
+      <span class="update-banner__icon">⬇️</span>
+      <div class="update-banner__text">
+        <strong id="update-title">Доступно обновление</strong>
+        <span id="update-detail">Новая версия загружается с GitHub…</span>
+      </div>
+      <div class="update-banner__actions">
+        <button id="update-installBtn" class="btn btn--small btn--primary hidden">Перезапустить и обновить</button>
+        <button id="update-closeBtn" class="btn btn--small btn--ghost">Скрыть</button>
+      </div>
+    </div>
+    <div id="update-progress" class="update-progress"><div class="update-progress__bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <div class="logo">G<span>E</span></div>
+        <div class="brand-text">
+          <h1>Guide English</h1>
+          <p>Английский с нуля до B1</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav__item active" data-route="dashboard"><span class="nav__icon">🏠</span> Главная</button>
+        <button class="nav__item" data-route="grammar"><span class="nav__icon">📚</span> Грамматика</button>
+        <button class="nav__item" data-route="listening"><span class="nav__icon">🎧</span> Аудирование</button>
+        <button class="nav__item" data-route="vocabulary"><span class="nav__icon">🃏</span> Словарь</button>
+        <button class="nav__item" data-route="practice"><span class="nav__icon">🧩</span> Тренировка</button>
+        <div class="nav__sep"></div>
+        <button class="nav__item" data-route="settings"><span class="nav__icon">⚙️</span> Настройки</button>
+        <a class="nav__item nav__item--link" href="https://github.com/ignatus4405-glitch/guide_english" target="_blank"><span class="nav__icon">⭐</span> GitHub</a>
+      </nav>
+
+      <div class="sidebar__progress">
+        <div class="sidebar__progress-head">
+          <span>Ваш прогресс</span>
+          <strong id="overall-progress">0%</strong>
+        </div>
+        <div class="progress-track"><div id="overall-progress-bar" class="progress-fill" style="width:0%"></div></div>
+        <p class="sidebar__hint">Проходите уроки и сдавайте тесты, чтобы открыть новые темы.</p>
+      </div>
+
+      <div class="sidebar__footer">
+        <span id="app-version">v0.1.0</span>
+        <span>•</span>
+        <span id="app-mode" class="badge">Windows</span>
+        <button id="check-updates-btn" class="link-btn">Проверить обновления</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar__search">
+          <span class="search-icon">🔍</span>
+          <input id="globalSearch" type="text" placeholder="Поиск: Present Simple, артикли, аудирование..." />
+        </div>
+        <div class="topbar__actions">
+          <div class="user-chip">
+            <span class="user-chip__avatar">👩‍🎓</span>
+            <span>Ученик</span>
+          </div>
+          <button id="resetProgressBtn" class="btn btn--ghost btn--small" title="Сбросить прогресс">↺ Сбросить</button>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <section id="content" class="content"></section>
+
+      <footer class="footer">
+        <span>© 2026 Guide English</span>
+        <span>Сделано для Windows 10/11 • Автообновления через GitHub Releases</span>
+        <a href="https://github.com/ignatus4405-glitch/guide_english/releases" target="_blank">История версий</a>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Grammar modal for exercises? We'll inline -->
+  <!-- TTS voice helper -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Data (no modules for simplicity) -->
+  <script src="../data/grammar.js"></script>
+  <script src="../data/listening.js"></script>
+  <script src="../data/vocabulary.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

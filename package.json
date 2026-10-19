@@ -1,0 +1,62 @@
+{
+  "name": "guide-english",
+  "productName": "Guide English",
+  "description": "Современная программа для изучения английского языка: правила, объяснения на русском и аудирование с озвучкой. Для Windows 10/11.",
+  "version": "0.1.0",
+  "author": "ignatus4405-glitch <342346515+ignatus4405-glitch@users.noreply.github.com>",
+  "license": "MIT",
+  "private": false,
+  "main": "src/main.js",
+  "homepage": "https://github.com/ignatus4405-glitch/guide_english",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ignatus4405-glitch/guide_english.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ignatus4405-glitch/guide_english/issues"
+  },
+  "keywords": [
+    "english",
+    "learning",
+    "education",
+    "windows",
+    "electron",
+    "listening",
+    "grammar"
+  ],
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "preview": "node scripts/serve-preview.js",
+    "icon": "node scripts/make-icon.js",
+    "validate": "node scripts/validate-data.js",
+    "test": "node --test tests/*.test.js && node scripts/validate-data.js",
+    "docs:generate": "node scripts/generate-docs.js",
+    "docs:check": "npm run docs:generate && git diff --exit-code -- docs/CONTENT_INDEX.md README.md",
+    "changelog": "node scripts/update-changelog.js",
+    "next-version": "node scripts/next-version.js",
+    "lint": "node scripts/check-syntax.js",
+    "pack": "electron-builder --dir --config electron-builder.yml",
+    "build": "electron-builder --config electron-builder.yml",
+    "build:win": "electron-builder --win --config electron-builder.yml",
+    "build:portable": "electron-builder --win portable --config electron-builder.yml",
+    "publish:win": "electron-builder --win --config electron-builder.yml --publish always",
+    "version:patch": "node scripts/bump-version.js patch",
+    "version:minor": "node scripts/bump-version.js minor",
+    "version:major": "node scripts/bump-version.js major",
+    "postinstall": "electron-builder install-app-deps || true"
+  },
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.3",
+    "jsdom": "^30.1.3"
+  },
+  "dependencies": {
+    "electron-log": "^5.0.1",
+    "electron-store": "^8.1.0",
+    "electron-updater": "^6.3.9"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
