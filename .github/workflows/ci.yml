@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  test:
+    name: Тесты и валидация
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Установка зависимостей
+        run: npm ci --no-audit --no-fund
+
+      - name: Иконка и её проверка
+        run: |
+          npm run icon
+          test -s resources/icon.ico
+          test -s resources/icon.png
+
+      - name: Unit-тесты контента
+        run: npm test
+
+      - name: Документация синхронна коду
+        run: |
+          npm run docs:generate
+          git diff --exit-code -- docs/CONTENT_INDEX.md README.md \
+            || (echo "::error::docs/CONTENT_INDEX.md или README.md устарели. Запустите npm run docs:generate и закоммитьте результат." && exit 1)
+
+      - name: Проверка синтаксиса JS
+        run: npm run lint
+
+      - name: Определение следующей версии
+        id: version
+        run: node scripts/next-version.js --github
+
+      - name: Сводка
+        run: |
+          {
+            echo "### Результат CI"
+            echo ""
+            echo "| Параметр | Значение |"
+            echo "|---|---|"
+            echo "| Версия в package.json | \`${{ steps.version.outputs.previousVersion }}\` |"
+            echo "| Следующий релиз | \`${{ steps.version.outputs.changed }}\` (\`${{ steps.version.outputs.bump }}\` → \`${{ steps.version.outputs.version }}\`) |"
+            echo "| Коммитов с последнего тега | ${{ steps.version.outputs.commits }} |"
+            echo "| feat / fix | ${{ steps.version.outputs.features }} / ${{ steps.version.outputs.fixes }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
