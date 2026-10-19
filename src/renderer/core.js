@@ -117,7 +117,8 @@
     async clearProgress() {
       try {
         if (hasElectron) return await window.guideEnglish.clearProgress();
-        ['game', 'settings', 'progress', 'completedLessons', 'vocabularyProgress'].forEach((k) =>
+        // настройки (settings) намеренно не трогаем: сброс прогресса не должен менять голос и тему
+        ['game', 'vocabKnown', 'progress', 'completedLessons', 'vocabularyProgress'].forEach((k) =>
           localStorage.removeItem(LS_PREFIX + k)
         );
         return { ok: true };
@@ -139,7 +140,8 @@
     daily: { date: '', xp: 0 },
     perfectLessons: 0,
     legacyLessons: [],
-    mistakes: []
+    mistakes: [],
+    activeDays: []
   };
 
   const state = {
@@ -264,7 +266,17 @@
     return state.game.streak.last === todayKey();
   }
 
+  function markActiveDay() {
+    const days = state.game.activeDays || [];
+    const today = todayKey();
+    if (!days.includes(today)) {
+      days.push(today);
+      state.game.activeDays = days.slice(-60);
+    }
+  }
+
   function touchStreak() {
+    markActiveDay();
     const s = state.game.streak;
     const today = todayKey();
     if (s.last === today) return { changed: false, count: s.count, shielded: false };
@@ -657,7 +669,9 @@
             options: q.options,
             answer: q.answer,
             explain: 'Ключевая фраза: ' + (lesson.scriptTips || lesson.title),
-            source: lesson.title
+            source: lesson.title,
+            // в смешанной тренировке даём прослушать текст, иначе вопрос «на слух» нечестен
+            listenText: lesson.textEn
           });
         });
       });

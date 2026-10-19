@@ -67,21 +67,6 @@ async function openFirstLesson(window) {
   assert.ok(window.document.querySelector('.lesson-screen'), 'урок не открылся');
 }
 
-function answerCurrent(window, correct = true) {
-  const content = window.document.querySelector('#lesson-content');
-  const options = content.querySelectorAll('.option');
-  assert.ok(options.length >= 2, 'нет вариантов ответа');
-  const correctIndex = Number(options[0].closest('.options').children[0].dataset.opt);
-  // правильный ответ вычисляем по data-атрибуту после проверки: кликаем первый
-  const target = correct ? options[0] : options[options.length - 1];
-  target.click();
-  const check = window.document.querySelector('.btn--check');
-  assert.ok(check, 'нет кнопки проверки');
-  assert.equal(check.disabled, false, 'кнопка проверки должна активироваться');
-  check.click();
-  return { correctIndex };
-}
-
 test('приложение стартует: путь, статистика, маскот', async () => {
   const { window, errors } = await bootApp();
   try {
@@ -275,6 +260,12 @@ test('аудирование: карточка прослушивания, те�
     const toggle = window.document.querySelector('[data-toggle]');
     toggle.click();
     assert.equal(window.document.querySelector('#listenText').hidden, false, 'текст не раскрылся');
+    const toggleRu = window.document.querySelector('[data-toggle-ru]');
+    assert.ok(toggleRu, 'нет переключателя перевода');
+    toggleRu.click();
+    const ru = window.document.querySelector('#listenRu');
+    assert.equal(ru.hidden, false, 'перевод не раскрылся');
+    assert.ok(ru.textContent.trim().length > 10, 'перевод пуст');
     window.document.querySelector('[data-continue]').click();
     await wait(30);
 

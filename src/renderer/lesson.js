@@ -231,7 +231,13 @@
       <div class="listen-text" id="listenText" hidden>
         <p>${escapeHtml(lesson.textEn)}</p>
       </div>
-      <button class="btn btn-3d btn--blue btn--wide" data-toggle>ПОКАЗАТЬ ТЕКСТ</button>
+      <div class="listen-text" id="listenRu" hidden>
+        <p class="listen-text__ru">${escapeHtml(lesson.textRu || '')}</p>
+      </div>
+      <div class="listen-actions">
+        <button class="btn btn-3d btn--blue" data-toggle>ПОКАЗАТЬ ТЕКСТ</button>
+        <button class="btn btn-3d btn--gray" data-toggle-ru>ПЕРЕВОД</button>
+      </div>
       <div class="tip-card" style="margin-top:14px">
         <b>🎯 Задание.</b> Прослушайте текст и ответьте на вопросы. Текст можно открыть, если что-то непонятно.
       </div>
@@ -244,6 +250,12 @@
       const show = box.hidden;
       box.hidden = !show;
       e.currentTarget.textContent = show ? 'СКРЫТЬ ТЕКСТ' : 'ПОКАЗАТЬ ТЕКСТ';
+    };
+    $('[data-toggle-ru]', root).onclick = (e) => {
+      const box = $('#listenRu');
+      const show = box.hidden;
+      box.hidden = !show;
+      e.currentTarget.textContent = show ? 'СКРЫТЬ ПЕРЕВОД' : 'ПЕРЕВОД';
     };
     $('#lesson-footer').innerHTML = `
       <div class="lesson-footer__actions">

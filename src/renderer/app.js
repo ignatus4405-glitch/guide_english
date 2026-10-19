@@ -489,10 +489,9 @@
       mixed: () => startPseudoLesson('practice', null, 'Смешанная тренировка'),
       mistakes: () => startPseudoLesson('mistakes', null, 'Работа над ошибками'),
       listening: () => {
+        // практика не должна закрывать шаги пути — запускаем тот же материал как тренировку
         const lesson = shuffle(ALL_LESSONS)[0];
-        const step = GE.lessonStepFor('listening', lesson.id);
-        if (step) startStep(step);
-        else startPseudoLesson('listening', lesson.id, lesson.title);
+        startPseudoLesson('listening', lesson.id, lesson.title);
       },
       vocab: () => {
         const set = shuffle(VOCAB)[0];
@@ -500,9 +499,7 @@
       },
       grammar: () => {
         const topic = shuffle(GRAMMAR)[0];
-        const step = GE.lessonStepFor('grammar', topic.id);
-        if (step) startStep(step);
-        else startPseudoLesson('grammar', topic.id, topic.title);
+        startPseudoLesson('grammar', topic.id, topic.title);
       }
     };
 
@@ -638,7 +635,13 @@
     const p = courseProgress();
     const stats = achievementStats();
     const achievements = unlockedAchievements();
-    const streakDays = Array.from({ length: 7 }).map((_, i) => i < Math.min(7, state.game.streak.count));
+    const activeDays = state.game.activeDays || [];
+    const weekDays = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+    const lastWeek = Array.from({ length: 7 }).map((_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (6 - i));
+      return { key: todayKey(d), label: weekDays[d.getDay()], active: activeDays.includes(todayKey(d)) };
+    });
 
     root.innerHTML = `
       <div class="page-head">
@@ -682,10 +685,11 @@
       <section class="card" style="margin-bottom:18px">
         <h3 class="card__title">Последние 7 дней</h3>
         <p class="card__text">Занимайтесь каждый день, чтобы увеличивать серию. Заморозку серии можно купить в магазине.</p>
-        <div style="display:flex;gap:10px;margin-top:14px">
-          ${streakDays.map((active, i) => `
-            <div style="width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:16px;border:2px solid ${active ? 'var(--orange)' : 'var(--line)'};background:${active ? '#fff0e6' : 'transparent'}">
-              ${active ? '🔥' : '<span style="opacity:.25">•</span>'}
+        <div class="week-strip">
+          ${lastWeek.map((day) => `
+            <div class="week-day ${day.active ? 'is-active' : ''}">
+              <div class="week-day__dot">${day.active ? '🔥' : ''}</div>
+              <span>${day.label}</span>
             </div>`).join('')}
         </div>
       </section>
@@ -905,7 +909,7 @@
           <div class="setting">
             <div>
               <div class="setting__label">Текущая версия</div>
-              <div class="setting__desc" id="versionLine">v0.2.0 • Windows</div>
+              <div class="setting__desc" id="versionLine">Windows 10/11</div>
             </div>
             <span class="pill pill--green" id="updateStatus">Проверка при запуске</span>
           </div>
@@ -1013,6 +1017,9 @@
         const line = root.querySelector('#versionLine');
         if (line) line.textContent = `v${v} • Windows`;
       }).catch(() => {});
+    } else {
+      const line = root.querySelector('#versionLine');
+      if (line) line.textContent = 'веб-версия • Windows';
     }
   };
 
@@ -1277,7 +1284,7 @@
     render();
     if (!hasElectron) {
       const mode = document.getElementById('app-version');
-      if (mode && !mode.textContent.trim()) mode.textContent = 'веб-версия';
+      if (mode) mode.textContent = 'веб-версия';
     }
 
     const started = lessonsDone() > 0;

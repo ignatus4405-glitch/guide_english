@@ -1470,3 +1470,20 @@ input[type="range"] { accent-color: var(--green); width: 170px; }
 [data-theme="dark"] .start-bubble { background: var(--bg-soft); }
 [data-theme="dark"] .start-bubble::after { background: var(--bg-soft); }
 [data-theme="dark"] .node-check { background: var(--bg); }
+
+/* Неделя активности в профиле */
+.week-strip { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.week-day { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.week-day__dot {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 17px;
+  border: 2px solid var(--line); background: transparent;
+}
+.week-day.is-active .week-day__dot { border-color: var(--orange); background: var(--yellow-l); }
+.week-day span { font-size: 11px; font-weight: 800; color: var(--muted); }
+.week-day.is-active span { color: var(--orange-d); }
+
+/* Аудирование: текст и перевод */
+.listen-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.listen-actions .btn { flex: 1 1 180px; }
+.listen-text__ru { color: var(--ink-soft); }
