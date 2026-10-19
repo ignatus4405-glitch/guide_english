@@ -74,7 +74,7 @@ npm run build:win    # локальная сборка установщика (W
 
 ## Как устроены версии и обновления
 
-1. Любой push в `main` запускает **CI** (тесты, валидация, проверка синхронности документации).
+1. Push в `main` и каждый pull request запускают **CI** (тесты, валидация, проверка синхронности документации).
 2. Workflow **Release** анализирует коммиты по [Conventional Commits](https://www.conventionalcommits.org/ru/):
    - `feat:` → minor (0.1.0 → 0.2.0);
    - `fix:`, `perf:`, `refactor:` → patch (0.1.0 → 0.1.1);
@@ -100,7 +100,7 @@ src/
     listening.js        9 уроков аудирования с вопросами
     vocabulary.js       наборы слов
 scripts/                иконка, валидация, версии, changelog, генерация docs
-tests/                  unit-тесты данных (node:test)
+tests/                  тесты данных и smoke-тест интерфейса (node:test + jsdom)
 docs/                   архитектура, гайды, changelog, индекс контента
 .github/workflows/      ci.yml, release.yml
 ```
