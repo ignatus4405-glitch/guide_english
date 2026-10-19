@@ -21,6 +21,15 @@
 
 <!-- RELEASES:START -->
 
+## [0.2.0] — 2026-10-19
+
+[Все изменения](https://github.com/ignatus4405-glitch/guide_english/compare/v0.1.3...v0.2.0)
+
+### ✨ Новые возможности
+
+- **ui:** подсказка по английским голосам и проверка артефактов автообновления (c4a2740)
+
+
 ## [0.1.3] — 2026-10-19
 
 [Все изменения](https://github.com/ignatus4405-glitch/guide_english/compare/v0.1.2...v0.1.3)
