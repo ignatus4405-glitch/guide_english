@@ -21,6 +21,23 @@
 
 <!-- RELEASES:START -->
 
+## [0.1.1] — 2026-10-19
+
+[Все изменения](https://github.com/ignatus4405-glitch/guide_english/compare/v0.1.0...v0.1.1)
+
+### 🐛 Исправления
+
+- **release:** заголовок и release notes в GitHub Release (99bba6f)
+
+### 🔧 Обслуживание
+
+- **deps:** ограничить dependabot patch/minor обновлениями (1d12a4f)
+
+### Прочее
+
+- Merge pull request #8 from ignatus4405-glitch/arena/a470dc14-guide-english (f758290)
+
+
 ## [0.1.0] — 2026-10-19
 
 [Все изменения](https://github.com/ignatus4405-glitch/guide_english/compare/main...v0.1.0)
