@@ -137,6 +137,7 @@
     utterance: null,
     queue: [],
     active: false,
+    token: 0,
 
     loadVoices() {
       if (!this.synth) return [];
@@ -183,6 +184,7 @@
 
     stop() {
       if (!this.synth) return;
+      this.token++;              // отменяет цепочку воспроизведения
       try { this.synth.cancel(); } catch (e) {}
       this.active = false;
     },
@@ -677,8 +679,11 @@
       b.onclick = () => {
         const lesson = ALL_LESSONS.find(l => l.id === b.dataset.play);
         if (lesson) {
-          tts.speak(lesson.textEn);
-          toast('Аудирование: ' + lesson.title, 'info', 'Стоп', () => tts.stop());
+          playTranscript(splitSentences(lesson.textEn));
+          toast('Аудирование: ' + lesson.title, 'info', 'Стоп', () => {
+            tts.stop();
+            highlightSentence(-1);
+          });
         }
       };
     });
@@ -773,6 +778,7 @@
     $$('#transcript [data-sent]').forEach(el => {
       el.onclick = () => {
         const idx = Number(el.dataset.sent);
+        tts.stop();
         highlightSentence(idx);
         tts.speak(sentences[idx], { onEnd: () => highlightSentence(-1) });
       };
@@ -808,12 +814,17 @@
 
   function playTranscript(sentences) {
     tts.stop();
+    const token = tts.token;
     let i = 0;
     const next = () => {
+      if (token !== tts.token) return;           // воспроизведение остановлено
       if (i >= sentences.length) { highlightSentence(-1); return; }
       const idx = i++;
       highlightSentence(idx);
-      tts.speak(sentences[idx], { onEnd: next, onError: () => highlightSentence(-1) });
+      tts.speak(sentences[idx], {
+        onEnd: next,
+        onError: () => { if (token === tts.token) highlightSentence(-1); }
+      });
     };
     next();
     toast('Слушаем текст. Нажмите ⏹ Стоп, чтобы остановить', 'info', null, null, 2500);

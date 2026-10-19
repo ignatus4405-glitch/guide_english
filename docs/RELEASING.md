@@ -63,6 +63,7 @@ git push --follow-tags
 `electron-builder` создаёт релиз с тегом `vX.Y.Z`. Заголовок и текст релиза формирует отдельный шаг workflow:
 `gh release edit` подставляет имя «Guide English X.Y.Z» и содержимое `build/release-notes.md`
 (генерируется из секции `docs/CHANGELOG.md` для этой версии скриптом `scripts/extract-release-notes.js`).
+Merge-коммиты и служебные `chore(release)` в changelog не попадают.
 Если нужно поменять текст уже опубликованного релиза — отредактируйте его на GitHub или перезапустите workflow.
 
 ## Где взять сборки
@@ -72,9 +73,9 @@ git push --follow-tags
 
 ## Как клиент узнаёт об обновлении
 
-1. `src/main.js` через 5 секунд после старта и далее каждые 4 часа вызывает `autoUpdater.checkForUpdatesAndNotify()`.
+1. `src/main.js` через 5 секунд после старта и далее каждые 4 часа вызывает `autoUpdater.checkForUpdates()` (автозагрузка включена, установку подтверждает пользователь).
 2. `electron-updater` читает `https://github.com/ignatus4405-glitch/guide_english/releases/latest/download/latest.yml`.
-3. Если `version` больше установленной → `update-available` → рендерер показывает баннер, main — системное уведомление.
+3. Если `version` больше установленной → `update-available` → рендерер показывает баннер, main — системное уведомление (собственное, без дублей от `checkForUpdatesAndNotify`).
 4. Файл скачивается в фоне, `download-progress` обновляет полосу прогресса.
 5. По `update-downloaded` появляется диалог: «Установить и перезапустить» → `quitAndInstall()`.
 
