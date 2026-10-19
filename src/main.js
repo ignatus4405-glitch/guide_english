@@ -2,6 +2,11 @@ const { app, BrowserWindow, ipcMain, dialog, shell, Menu } = require('electron')
 const path = require('path');
 const fs = require('fs');
 
+// Windows: корректный AppUserModelID нужен для системных уведомлений и панели задач
+if (process.platform === 'win32') {
+  app.setAppUserModelId('com.guideenglish.app');
+}
+
 // electron-log for updater feedback
 let log;
 try { log = require('electron-log'); } catch (e) { log = console; }

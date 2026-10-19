@@ -35,7 +35,7 @@
 | Нет React/сборщика | Приложение целиком статичное, данные — JS-объекты. Меньше зависимостей → быстрее CI и проще поддержка агентами. |
 | Данные в `src/data/*.js` | Файлы одновременно работают как CommonJS-модуль (для тестов и генерации docs) и как глобальные объекты (`window.GRAMMAR_TOPICS`) для рендерера. |
 | `contextIsolation: true`, `nodeIntegration: false` | Безопасность: рендерер не имеет доступа к Node, только к явному API из `preload.js`. |
-| `electron-store` | Переживает перезапуск и обновления; данные лежат в `%APPDATA%/guide-english/guide-english-store.json`. |
+| `electron-store` | Переживает перезапуск и обновления; данные лежат в `%APPDATA%/Guide English/guide-english-store.json` (путь зависит от `productName`). |
 | Web Speech API | Не требует ключей, работает офлайн с голосами Windows (SAPI). Голоса перечисляются динамически. |
 | `electron-updater` + GitHub provider | Бесплатные релизы, `latest.yml` генерируется electron-builder, клиент обновляется без сервера. |
 | NSIS + portable | Установщик для обычных пользователей, portable — для запуска без прав администратора. |

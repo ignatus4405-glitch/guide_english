@@ -9,6 +9,7 @@
 3. [`docs/RELEASING.md`](docs/RELEASING.md) — как работает авто-версионирование и автообновление.
 4. [`docs/CONTENT_GUIDE.md`](docs/CONTENT_GUIDE.md) — как добавлять темы, уроки и слова.
 5. [`docs/CHANGELOG.md`](docs/CHANGELOG.md) — что уже сделано и почему.
+6. [`docs/ROADMAP.md`](docs/ROADMAP.md) — что делать дальше.
 
 ## Быстрый старт
 
