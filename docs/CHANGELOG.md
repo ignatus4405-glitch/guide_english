@@ -21,6 +21,19 @@
 
 <!-- RELEASES:START -->
 
+## [0.1.3] — 2026-10-19
+
+[Все изменения](https://github.com/ignatus4405-glitch/guide_english/compare/v0.1.2...v0.1.3)
+
+### 🐛 Исправления
+
+- **win:** AppUserModelID для системных уведомлений (30e09a7)
+
+### 📝 Документация
+
+- руководство пользователя, роадмап и известные ограничения (47f819d)
+
+
 ## [0.1.2] — 2026-10-19
 
 [Все изменения](https://github.com/ignatus4405-glitch/guide_english/compare/v0.1.1...v0.1.2)
