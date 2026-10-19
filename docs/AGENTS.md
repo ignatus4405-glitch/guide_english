@@ -78,13 +78,19 @@ git diff                 # самопроверка диффа
 - отсутствие `<script>` и `onerror=` в HTML-контенте;
 - наличие обязательных файлов и иконки.
 
-## 7. Релиз
+## 7. Зависимости
+
+Dependabot обновляет npm-пакеты и GitHub Actions раз в неделю/месяц, но **только patch/minor**:
+мажорные версии Electron, electron-builder и electron-store требуют миграции кода
+(electron-store 9+ — ESM-only) и обновляются вручную отдельным PR с проверкой сборки.
+
+## 8. Релиз
 
 Автоматически: merge/push в `main` → версия, тег, сборка, GitHub Release.
 Вручную: `Actions → Release → Run workflow` (`patch` / `minor` / `major` / `auto`).
 Подробности и troubleshooting — `docs/RELEASING.md`.
 
-## 8. Что делать, если CI упал
+## 9. Что делать, если CI упал
 
 | Симптом | Действие |
 |---|---|
