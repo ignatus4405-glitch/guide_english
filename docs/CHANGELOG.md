@@ -20,4 +20,30 @@
 - Документация для агентов: архитектура, гайд по контенту, процесс релиза, индекс контента.
 
 <!-- RELEASES:START -->
+
+## [0.1.0] — 2026-10-19
+
+[Все изменения](https://github.com/ignatus4405-glitch/guide_english/compare/main...v0.1.0)
+
+### ✨ Новые возможности
+
+- **app:** приложение Guide English для Windows на Electron (c1e3952)
+
+### 🐛 Исправления
+
+- **ci:** Node.js 22 для jsdom-тестов и обновление actions до v5 (ed64eb3)
+
+### 📝 Документация
+
+- архитектура, гайд для агентов, changelog и индекс контента (1e9e22d)
+
+### 🤖 CI/CD
+
+- CI, автоматические релизы и автообновление клиента (2a39ffe)
+
+### Прочее
+
+- Merge pull request #1 from ignatus4405-glitch/arena/a470dc14-guide-english (5b56ce1)
+- Initial commit (df54b42)
+
 <!-- RELEASES:END -->
