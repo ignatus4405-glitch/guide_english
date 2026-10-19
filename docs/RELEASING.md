@@ -58,6 +58,13 @@ git push --follow-tags
 
 Тег `v*` запускает `release.yml` (сборка и публикация). Повышать версию дважды не нужно: workflow увидит, что `package.json` уже равен тегу.
 
+## Оформление релиза
+
+`electron-builder` создаёт релиз с тегом `vX.Y.Z`. Заголовок и текст релиза формирует отдельный шаг workflow:
+`gh release edit` подставляет имя «Guide English X.Y.Z» и содержимое `build/release-notes.md`
+(генерируется из секции `docs/CHANGELOG.md` для этой версии скриптом `scripts/extract-release-notes.js`).
+Если нужно поменять текст уже опубликованного релиза — отредактируйте его на GitHub или перезапустите workflow.
+
 ## Где взять сборки
 
 - GitHub Releases: `https://github.com/ignatus4405-glitch/guide_english/releases`
