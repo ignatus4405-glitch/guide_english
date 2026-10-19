@@ -11,7 +11,8 @@ push в main
           1. npm install, тесты
           2. scripts/next-version.js → версия по Conventional Commits
           3. если версия выросла:
-               package.json bump → docs/CHANGELOG.md → docs/CONTENT_INDEX.md → README stats
+               package.json + lock bump → docs/CHANGELOG.md (вместе с подробностями
+               из «Unreleased») → docs/CONTENT_INDEX.md → README stats
                commit "chore(release): vX.Y.Z [skip ci]" → tag vX.Y.Z → push
           4. windows-latest: electron-builder --win --publish always
           5. GitHub Release: Setup .exe, Portable .exe, latest.yml, blockmap, notes

@@ -91,6 +91,22 @@ if (!fs.existsSync(FILE)) {
 }
 
 let content = fs.readFileSync(FILE, 'utf8');
+
+// Ручные заметки из «Unreleased» переносим в запись этого релиза и очищаем раздел,
+// чтобы подробное описание не потерялось и не осталось висеть в changelog навсегда.
+const uStart = content.search(/^## Unreleased\s*$/m);
+if (uStart >= 0) {
+  const afterStart = content.indexOf('\n', uStart) + 1;
+  const rest = content.slice(afterStart);
+  const nextHeading = rest.search(/^## /m);
+  const bodyEnd = nextHeading >= 0 ? afterStart + nextHeading : content.length;
+  const body = content.slice(afterStart, bodyEnd).trim();
+  content = content.slice(0, uStart) + '## Unreleased\n\n' + content.slice(bodyEnd);
+  if (body) {
+    entry += `\n### Подробности\n\n${body.replace(/^### /gm, '#### ')}\n\n`;
+  }
+}
+
 const marker = '<!-- RELEASES:START -->';
 if (content.includes(marker)) {
   content = content.replace(marker, `${marker}\n\n${entry.trim()}\n`);

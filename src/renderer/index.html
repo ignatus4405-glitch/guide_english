@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline'; connect-src *; media-src *; img-src 'self' data: https:;">
   <link rel="icon" href="favicon.png" />
-  <title>Guide English — изучай английский с нуля</title>
+  <title>Guide English — учи английский как в игре</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Update banner -->
   <div id="update-banner" class="update-banner hidden">
     <div class="update-banner__content">
       <span class="update-banner__icon">⬇️</span>
@@ -18,87 +17,88 @@
         <span id="update-detail">Новая версия загружается с GitHub…</span>
       </div>
       <div class="update-banner__actions">
-        <button id="update-installBtn" class="btn btn--small btn--primary hidden">Перезапустить и обновить</button>
-        <button id="update-closeBtn" class="btn btn--small btn--ghost">Скрыть</button>
+        <button id="update-installBtn" class="btn-3d btn--white btn--small hidden">Перезапустить</button>
+        <button id="update-closeBtn" class="icon-btn icon-btn--ghost" aria-label="Скрыть">✕</button>
       </div>
     </div>
-    <div id="update-progress" class="update-progress"><div class="update-progress__bar" style="width:0%"></div></div>
+    <div id="update-progress" class="update-progress"><div class="update-progress__bar"></div></div>
   </div>
 
   <div class="app">
-    <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="sidebar__brand">
-        <div class="logo">G<span>E</span></div>
-        <div class="brand-text">
-          <h1>Guide English</h1>
-          <p>Английский с нуля до B1</p>
-        </div>
-      </div>
+      <a class="brand" href="#learn" aria-label="Guide English — на главную">
+        <span class="brand__mark" id="brand-owl"></span>
+        <span class="brand__name">Guide English</span>
+      </a>
 
-      <nav class="nav">
-        <button class="nav__item active" data-route="dashboard"><span class="nav__icon">🏠</span> Главная</button>
-        <button class="nav__item" data-route="grammar"><span class="nav__icon">📚</span> Грамматика</button>
-        <button class="nav__item" data-route="listening"><span class="nav__icon">🎧</span> Аудирование</button>
-        <button class="nav__item" data-route="vocabulary"><span class="nav__icon">🃏</span> Словарь</button>
-        <button class="nav__item" data-route="practice"><span class="nav__icon">🧩</span> Тренировка</button>
-        <div class="nav__sep"></div>
-        <button class="nav__item" data-route="settings"><span class="nav__icon">⚙️</span> Настройки</button>
-        <a class="nav__item nav__item--link" href="https://github.com/ignatus4405-glitch/guide_english" target="_blank"><span class="nav__icon">⭐</span> GitHub</a>
+      <nav class="nav" id="main-nav">
+        <button class="nav-item" data-route="learn"><span class="nav-item__icon">🏠</span><span>Учиться</span></button>
+        <button class="nav-item" data-route="practice"><span class="nav-item__icon">🎯</span><span>Практика</span></button>
+        <button class="nav-item" data-route="reference"><span class="nav-item__icon">📖</span><span>Справочник</span></button>
+        <button class="nav-item" data-route="vocab"><span class="nav-item__icon">🃏</span><span>Словарь</span></button>
+        <button class="nav-item" data-route="profile"><span class="nav-item__icon">🦉</span><span>Профиль</span></button>
+        <button class="nav-item" data-route="shop"><span class="nav-item__icon">🛍️</span><span>Магазин</span></button>
+        <button class="nav-item" data-route="settings"><span class="nav-item__icon">⚙️</span><span>Настройки</span></button>
       </nav>
 
-      <div class="sidebar__progress">
-        <div class="sidebar__progress-head">
-          <span>Ваш прогресс</span>
-          <strong id="overall-progress">0%</strong>
+      <div class="sidebar__goal">
+        <div class="goal">
+          <div class="goal__ring">
+            <svg viewBox="0 0 44 44" aria-hidden="true">
+              <circle class="ring-bg" cx="22" cy="22" r="18"></circle>
+              <circle class="ring-fg" id="goal-ring" cx="22" cy="22" r="18"></circle>
+            </svg>
+            <span class="goal__emoji">🎯</span>
+          </div>
+          <div class="goal__text">
+            <b>Дневная цель</b>
+            <span id="goal-text">0 / 20 XP</span>
+          </div>
         </div>
-        <div class="progress-track"><div id="overall-progress-bar" class="progress-fill" style="width:0%"></div></div>
-        <p class="sidebar__hint">Проходите уроки и сдавайте тесты, чтобы открыть новые темы.</p>
       </div>
 
-      <div class="sidebar__footer">
-        <span id="app-version">v0.1.0</span>
-        <span>•</span>
-        <span id="app-mode" class="badge">Windows</span>
-        <button id="check-updates-btn" class="link-btn">Проверить обновления</button>
+      <div class="sidebar__foot">
+        <span id="app-version">веб-версия</span>
+        <button class="link-btn" id="check-updates-btn">Обновления</button>
       </div>
     </aside>
 
-    <!-- Main -->
-    <main class="main">
+    <div class="shell">
       <header class="topbar">
-        <div class="topbar__search">
-          <span class="search-icon">🔍</span>
-          <input id="globalSearch" type="text" placeholder="Поиск: Present Simple, артикли, аудирование..." />
+        <div class="topbar__stats" id="topbar-stats">
+          <button class="stat" data-goto="profile" title="Серия дней">🔥 <b id="stat-streak">0</b></button>
+          <button class="stat" data-goto="shop" title="Самоцветы">💎 <b id="stat-gems">0</b></button>
+          <button class="stat" data-goto="shop" title="Сердца">❤️ <b id="stat-hearts">5</b></button>
+          <button class="stat stat--xp" data-goto="profile" title="Опыт">⚡ <b id="stat-xp">0</b> XP</button>
         </div>
-        <div class="topbar__actions">
-          <div class="user-chip">
-            <span class="user-chip__avatar">👩‍🎓</span>
-            <span>Ученик</span>
+
+        <div class="topbar__right">
+          <div class="search" id="search">
+            <span class="search__icon">🔍</span>
+            <input id="globalSearch" type="search" placeholder="Поиск по курсу…" autocomplete="off" />
+            <div class="search__panel" id="search-panel" hidden></div>
           </div>
-          <button id="resetProgressBtn" class="btn btn--ghost btn--small" title="Сбросить прогресс">↺ Сбросить</button>
+          <button class="avatar" id="avatar-btn" data-goto="profile" aria-label="Профиль">
+            <span id="avatar-owl"></span>
+            <span class="avatar__level" id="avatar-level">1</span>
+          </button>
         </div>
       </header>
 
-      <!-- Content -->
-      <section id="content" class="content"></section>
-
-      <footer class="footer">
-        <span>© 2026 Guide English</span>
-        <span>Сделано для Windows 10/11 • Автообновления через GitHub Releases</span>
-        <a href="https://github.com/ignatus4405-glitch/guide_english/releases" target="_blank">История версий</a>
-      </footer>
-    </main>
+      <main id="view" class="view"></main>
+    </div>
   </div>
 
-  <!-- Grammar modal for exercises? We'll inline -->
-  <!-- TTS voice helper -->
-  <div id="toast-container" class="toast-container"></div>
+  <div id="lesson-root"></div>
+  <div id="modal-root"></div>
+  <div id="toast-root" class="toast-root"></div>
 
-  <!-- Data (no modules for simplicity) -->
   <script src="../data/grammar.js"></script>
   <script src="../data/listening.js"></script>
   <script src="../data/vocabulary.js"></script>
+  <script src="../data/course.js"></script>
+  <script src="core.js"></script>
+  <script src="lesson.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

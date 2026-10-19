@@ -16,6 +16,7 @@ const ROOT = path.join(__dirname, '..');
 const grammar = require(path.join(ROOT, 'src/data/grammar.js'));
 const listening = require(path.join(ROOT, 'src/data/listening.js'));
 const vocabulary = require(path.join(ROOT, 'src/data/vocabulary.js'));
+const { COURSE_UNITS, ACHIEVEMENTS, SHOP_ITEMS } = require(path.join(ROOT, 'src/data/course.js'));
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
 
 function sha256(rel) {
@@ -33,6 +34,24 @@ const grammarExercises = grammar.reduce((n, t) => n + (t.content.exercises?.leng
 const lessons = listening.flatMap(l => l.lessons.map(x => ({ ...x, level: l.title })));
 const questions = lessons.reduce((n, l) => n + l.questions.length, 0);
 const words = vocabulary.reduce((n, s) => n + s.words.length, 0);
+const steps = COURSE_UNITS.flatMap((u) => u.steps.map((s) => ({ ...s, unit: u.title, color: u.color })));
+const TYPE_LABELS = {
+  grammar: 'Грамматика',
+  listening: 'Аудирование',
+  vocab: 'Словарь',
+  practice: 'Практика',
+  chest: 'Сундук',
+  trophy: 'Финал раздела'
+};
+const refTitle = (step) => {
+  if (step.type === 'grammar') return (grammar.find((t) => t.id === step.ref) || {}).title || '—';
+  if (step.type === 'listening') {
+    const lesson = listening.flatMap((l) => l.lessons).find((l) => l.id === step.ref);
+    return lesson ? lesson.title : '—';
+  }
+  if (step.type === 'vocab') return (vocabulary.find((v) => v.id === step.ref) || {}).title || '—';
+  return step.type === 'practice' ? 'Смешанные вопросы' : 'Награда';
+};
 
 // ---------- CONTENT_INDEX.md ----------
 let md = `# Индекс учебного контента
@@ -45,6 +64,10 @@ let md = `# Индекс учебного контента
 
 | Раздел | Количество |
 |---|---|
+| Разделов пути | ${COURSE_UNITS.length} |
+| Шагов пути | ${steps.length} |
+| Достижений | ${ACHIEVEMENTS.length} |
+| Товаров магазина | ${SHOP_ITEMS.length} |
 | Тем грамматики | ${grammar.length} |
 | Упражнений | ${grammarExercises} |
 | Уровней аудирования | ${listening.length} |
@@ -52,6 +75,14 @@ let md = `# Индекс учебного контента
 | Вопросов к аудированию | ${questions} |
 | Наборов слов | ${vocabulary.length} |
 | Слов | ${words} |
+
+## Путь обучения
+
+| Раздел | # | Шаг | Тип | Материал |
+|---|---|---|---|---|
+${COURSE_UNITS.map((unit, ui) => unit.steps.map((step, si) =>
+  `| ${ui + 1}. ${esc(unit.title)} | ${si + 1} | ${esc(step.title)} | ${TYPE_LABELS[step.type] || step.type} | ${esc(refTitle(step))} |`
+).join('\n')).join('\n')}
 
 ## Грамматика
 
@@ -95,9 +126,9 @@ console.log('✓ docs/CONTENT_INDEX.md');
 
 // ---------- README stats ----------
 const statsBlock = `<!-- CONTENT_STATS:START -->
-| Грамматика | Аудирование | Словарь | Версия |
-|---|---|---|---|
-| ${grammar.length} тем / ${grammarExercises} упражнений | ${lessons.length} уроков / ${questions} вопросов | ${words} слов | v${pkg.version} |
+| Путь | Грамматика | Аудирование | Словарь | Версия |
+|---|---|---|---|---|
+| ${COURSE_UNITS.length} разделов / ${steps.length} шагов | ${grammar.length} тем / ${grammarExercises} упражнений | ${lessons.length} уроков / ${questions} вопросов | ${words} слов | v${pkg.version} |
 <!-- CONTENT_STATS:END -->`;
 
 const readmePath = path.join(ROOT, 'README.md');

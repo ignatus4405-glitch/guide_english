@@ -28,6 +28,7 @@ function load(rel) {
 const grammar = load('src/data/grammar.js');
 const listening = load('src/data/listening.js');
 const vocab = load('src/data/vocabulary.js');
+const course = load('src/data/course.js');
 
 // ---------- package.json ----------
 const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
@@ -154,12 +155,98 @@ else {
   console.log(`  vocabulary: ${vocab.length} наборов, ${words} слов`);
 }
 
+// ---------- Course ----------
+const topicIds = new Set((grammar || []).map((t) => t.id));
+const lessonIds = new Set((listening || []).flatMap((l) => (l.lessons || []).map((x) => x.id)));
+const setIds = new Set((vocab || []).map((s) => s.id));
+
+if (!course) {
+  fail('course.js: не загрузился');
+} else {
+  const units = course.COURSE_UNITS || [];
+  const achievements = course.ACHIEVEMENTS || [];
+  const shop = course.SHOP_ITEMS || [];
+  if (!units.length) fail('course.js: нет разделов');
+
+  const stepIds = new Set();
+  const types = ['grammar', 'listening', 'vocab', 'practice', 'chest', 'trophy'];
+  const usedTopics = new Set();
+  const usedLessons = new Set();
+  const usedSets = new Set();
+  let stepCount = 0;
+
+  units.forEach((unit, ui) => {
+    const at = `course.unit[${ui}] (${unit && unit.id})`;
+    if (!unit.id) fail(`${at}: нет id`);
+    if (!unit.title) fail(`${at}: нет title`);
+    if (!unit.color) fail(`${at}: нет color`);
+    if (!Array.isArray(unit.steps) || unit.steps.length < 4) fail(`${at}: мало шагов`);
+    if (!(unit.steps || []).some((s) => s.type === 'practice')) warn(`${at}: нет практики`);
+
+    (unit.steps || []).forEach((step, si) => {
+      stepCount++;
+      const sat = `${at}.step[${si}] (${step && step.id})`;
+      if (!step.id) return fail(`${sat}: нет id`);
+      if (stepIds.has(step.id)) fail(`${sat}: дублирующийся id шага`);
+      stepIds.add(step.id);
+      if (!types.includes(step.type)) fail(`${sat}: неизвестный тип ${step.type}`);
+      if (!step.title) fail(`${sat}: нет title`);
+      if (!step.icon) fail(`${sat}: нет icon`);
+
+      if (step.type === 'grammar') {
+        if (!topicIds.has(step.ref)) fail(`${sat}: нет темы ${step.ref}`);
+        else usedTopics.add(step.ref);
+      }
+      if (step.type === 'listening') {
+        if (!lessonIds.has(step.ref)) fail(`${sat}: нет урока ${step.ref}`);
+        else usedLessons.add(step.ref);
+      }
+      if (step.type === 'vocab') {
+        if (!setIds.has(step.ref)) fail(`${sat}: нет набора ${step.ref}`);
+        else usedSets.add(step.ref);
+      }
+    });
+  });
+
+  if (grammar) {
+    grammar.forEach((t) => {
+      if (!usedTopics.has(t.id)) warn(`тема ${t.id} не входит в путь обучения`);
+    });
+  }
+  if (listening) {
+    listening.forEach((lvl) => (lvl.lessons || []).forEach((l) => {
+      if (!usedLessons.has(l.id)) warn(`урок ${l.id} не входит в путь обучения`);
+    }));
+  }
+  if (vocab) {
+    vocab.forEach((s) => {
+      if (!usedSets.has(s.id)) warn(`набор ${s.id} не входит в путь обучения`);
+    });
+  }
+
+  if (achievements.length < 8) fail('course.js: мало достижений');
+  achievements.forEach((a, i) => {
+    if (!a.id || !a.title || !a.desc) fail(`achievements[${i}]: неполное описание`);
+    if (typeof a.check !== 'function') fail(`achievements[${i}]: нет функции check`);
+  });
+
+  if (shop.length < 3) fail('course.js: мало товаров магазина');
+  shop.forEach((item, i) => {
+    if (!item.id || !item.title) fail(`shop[${i}]: неполное описание`);
+    if (!(Number(item.price) > 0)) fail(`shop[${i}]: некорректная цена`);
+  });
+
+  console.log(`  course: ${units.length} разделов, ${stepCount} шагов, ${achievements.length} достижений`);
+}
+
 // ---------- Required files ----------
 const required = [
   'src/main.js', 'src/preload.js', 'src/renderer/index.html',
-  'src/renderer/app.js', 'src/renderer/styles.css',
+  'src/renderer/app.js', 'src/renderer/core.js', 'src/renderer/lesson.js',
+  'src/renderer/styles.css', 'src/data/course.js',
   'electron-builder.yml', 'README.md',
-  'docs/CHANGELOG.md', 'docs/AGENTS.md', 'docs/ARCHITECTURE.md'
+  'docs/CHANGELOG.md', 'docs/AGENTS.md', 'docs/ARCHITECTURE.md',
+  'docs/CONTENT_INDEX.md', 'docs/USER_GUIDE.md'
 ];
 required.forEach(f => { if (!fs.existsSync(path.join(ROOT, f))) fail(`Отсутствует обязательный файл: ${f}`); });
 
