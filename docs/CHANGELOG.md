@@ -3,7 +3,7 @@
 Все заметные изменения проекта. Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
 Записи для новых версий добавляются автоматически workflow `Release` из Conventional Commits.
-Ручные записи о нерелизных изменениях можно добавлять в раздел «Unreleased» перед первым релизом.
+Подробности, добавленные в раздел «Unreleased», при выпуске переносятся в запись версии и очищаются.
 
 ## Unreleased
 

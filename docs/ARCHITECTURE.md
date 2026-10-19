@@ -56,7 +56,8 @@ state.game = {
   boostUntil: 0,                                   // двойной XP до timestamp
   daily: { date: '2026-10-19', xp: 30 },           // дневная цель
   perfectLessons: 2,
-  mistakes: [{ prompt, options, answer, explain, source }],  // до 30 вопросов
+  mistakes: [{ prompt, options, answer, explain, source }],  // до 30 вопросов для «Работы над ошибками»
+  activeDays: ['2026-10-17', '2026-10-19'],        // дни с занятиями, последние 60 — для недели в профиле
   legacyLessons: []
 };
 state.vocabKnown = { everyday-100: ['time', 'work'] };  // ключ — набор, значения — слова
