@@ -23,7 +23,7 @@ fs.mkdirSync(path.dirname(outPath), { recursive: true });
 let notes = `## Guide English ${version}\n\n`;
 
 if (fs.existsSync(changelogPath)) {
-  const changelog = fs.readFileSync(changelogPath, 'utf8');
+  const changelog = fs.readFileSync(changelogPath, 'utf8').replace(/\r\n/g, '\n');
   const lines = changelog.split('\n');
   const start = lines.findIndex(l => l.startsWith(`## [${version}]`));
   if (start >= 0) {
