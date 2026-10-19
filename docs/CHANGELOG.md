@@ -21,6 +21,15 @@
 
 <!-- RELEASES:START -->
 
+## [0.1.2] — 2026-10-19
+
+[Все изменения](https://github.com/ignatus4405-glitch/guide_english/compare/v0.1.1...v0.1.2)
+
+### 🐛 Исправления
+
+- **updater:** одно уведомление об обновлении и корректная остановка озвучки (60f92bf)
+
+
 ## [0.1.1] — 2026-10-19
 
 [Все изменения](https://github.com/ignatus4405-glitch/guide_english/compare/v0.1.0...v0.1.1)
