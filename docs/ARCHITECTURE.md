@@ -46,7 +46,7 @@
 2. **Ответ на упражнение.** Клик → запись в `state.progress[topicId].answers[i]` (`'correct' | 'wrong'`) → `scheduleSave()` (debounce 250 мс) → `Store.set` → IPC `store:set`.
 3. **Аудирование.** Текст разбивается на предложения → TTS говорит по одному, подсвечивая строку. По завершении всех вопросов, если верно ≥ 66 %, урок попадает в `completedLessons`.
 4. **Аудирование (скорость/голос).** Значения хранятся в `settings` и применяются к каждому `SpeechSynthesisUtterance`.
-5. **Обновление.** `autoUpdater.checkForUpdatesAndNotify()` → события `update-available` / `download-progress` / `update-downloaded` → IPC → баннер в рендерере и системное уведомление → `autoUpdater.quitAndInstall()`.
+5. **Обновление.** `autoUpdater.checkForUpdates()` → события `update-available` / `download-progress` / `update-downloaded` → IPC → баннер в рендерере и системное уведомление → `autoUpdater.quitAndInstall()`.
 
 ## IPC-контракт (`preload.js`)
 

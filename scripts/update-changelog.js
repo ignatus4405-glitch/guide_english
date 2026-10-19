@@ -23,8 +23,9 @@ function sh(cmd) {
 }
 
 const range = fromTag ? `${fromTag}..HEAD` : 'HEAD';
-const raw = sh(`git log ${range} --pretty=format:%H%x1f%s%x1f%b%x1e`);
-const commits = raw ? raw.split('\x1e').map(s => s.trim()).filter(Boolean).map(rec => {
+const raw = sh(`git log ${range} --pretty=format:%H%x1f%s%x1f%b%x1e`).replace(/\r\n/g, '\n');
+const commits = raw ? raw.split('\x1e').map(s => s.trim()).filter(Boolean)
+  .map(rec => {
   const [hash, subject, body = ''] = rec.split('\x1f');
   const m = /^(\w+)(\([^)]*\))?(!)?:\s*(.+)$/.exec(subject || '');
   return {
@@ -35,7 +36,10 @@ const commits = raw ? raw.split('\x1e').map(s => s.trim()).filter(Boolean).map(r
     description: m ? m[4] : (subject || ''),
     raw: subject || ''
   };
-}) : [];
+})
+  // merge-коммиты и служебные коммиты релиза не попадают в changelog
+  .filter(c => !/^Merge\s/i.test(c.raw) && !/^chore\(release\)/i.test(c.raw))
+  : [];
 
 const GROUPS = [
   { key: 'feat', title: '✨ Новые возможности' },

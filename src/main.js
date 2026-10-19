@@ -41,8 +41,9 @@ if (app.isPackaged) {
     const updater = require('electron-updater');
     autoUpdater = updater.autoUpdater;
     autoUpdater.logger = log;
-    autoUpdater.autoDownload = true;
+    autoUpdater.autoDownload = true;          // скачиваем в фоне, установку подтверждает пользователь
     autoUpdater.autoInstallOnAppQuit = true;
+    autoUpdater.allowPrerelease = false;
     updaterEnabled = true;
     log.info('Updater enabled');
   } catch (e) {
@@ -117,7 +118,7 @@ function createWindow() {
     setTimeout(() => {
       try {
         log.info('Checking for updates via GitHub Releases...');
-        autoUpdater.checkForUpdatesAndNotify().catch(err => {
+        autoUpdater.checkForUpdates().catch(err => {
           log.error('Update check failed:', err.message);
         });
       } catch (e) {
@@ -127,7 +128,7 @@ function createWindow() {
 
     // periodic check every 4 hours
     setInterval(() => {
-      autoUpdater.checkForUpdatesAndNotify().catch(()=>{});
+      autoUpdater.checkForUpdates().catch(()=>{});
     }, 4 * 60 * 60 * 1000);
   }
 
@@ -214,7 +215,7 @@ function checkForUpdatesManually() {
     message: 'Ищем новую версию на GitHub...',
     detail: `Текущая версия: ${app.getVersion()}`
   });
-  autoUpdater.checkForUpdatesAndNotify().catch(err => {
+  autoUpdater.checkForUpdates().catch(err => {
     dialog.showErrorBox('Ошибка проверки обновлений', err.message);
   });
 }
@@ -286,7 +287,7 @@ function setupIpc() {
   ipcMain.handle('app:isPackaged', () => app.isPackaged);
   ipcMain.handle('app:checkForUpdates', () => {
     if (updaterEnabled && autoUpdater) {
-      return autoUpdater.checkForUpdatesAndNotify().then(() => ({ ok: true })).catch(err => ({ ok: false, error: err.message }));
+      return autoUpdater.checkForUpdates().then(() => ({ ok: true })).catch(err => ({ ok: false, error: err.message }));
     }
     return Promise.resolve({ ok: false, error: isDev ? 'Updater disabled in dev mode' : 'Updater not available' });
   });
