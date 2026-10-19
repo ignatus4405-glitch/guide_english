@@ -1,0 +1,63 @@
+appId: com.guideenglish.app
+productName: Guide English
+copyright: "Copyright © 2026 Guide English"
+
+directories:
+  output: dist
+  buildResources: resources
+
+files:
+  - src/**/*
+  - resources/icon.ico
+  - resources/icon.png
+  - package.json
+  - "!**/*.ts"
+  - "!**/*.map"
+  - "!src/**/*.test.js"
+  - "!docs/**/*"
+  - "!.github/**/*"
+
+asar: true
+asarUnpack:
+  - "**/*.node"
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+    - target: portable
+      arch: [x64]
+  icon: resources/icon.ico
+  publisherName: Guide English
+  verifyUpdateCodeSignature: false
+
+nsis:
+  artifactName: Guide-English-Setup-${version}.${ext}
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  allowElevation: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Guide English
+  installerIcon: resources/icon.ico
+  uninstallerIcon: resources/icon.ico
+  installerHeaderIcon: resources/icon.ico
+  deleteAppDataOnUninstall: false
+  warningsAsErrors: false
+
+portable:
+  artifactName: Guide-English-Portable-${version}.${ext}
+
+publish:
+  provider: github
+  owner: ignatus4405-glitch
+  repo: guide_english
+  private: false
+  releaseType: release
+
+releaseInfo:
+  releaseNotesFile: build/release-notes.md
+  releaseName: Guide English ${version}
+
+extraMetadata:
+  main: src/main.js

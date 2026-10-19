@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist/
+out/
+build/
+*.exe
+*.msi
+*.dmg
+*.AppImage
+*.snap
+*.deb
+*.rpm
+*.blockmap
+latest*.yml
+
+# Electron
+.webpack/
+.parcel-cache/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime / caches
+.pnp/
+.pnp.js
+coverage/
+.nyc_output/
+.temp/
+tmp/
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Store / user data (dev)
+user-data/
